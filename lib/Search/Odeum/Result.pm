@@ -40,6 +40,20 @@ initialize the iterator of documents.
 get the number of the documents.
 but this number contains the deleted document.
 
+=item and_op(I<$result2>);
+
+get the new result which have common elements of two results;
+
+ my $res = $res1->and_op($res2);
+
+=item or_op(I<$result2>);
+
+get the new result which have sum of elements of two results;
+
+=item notand_op(I<$result2>);
+
+get the new result which have difference of elements of two results;
+
 =back
 
 =head1 SEE ALSO

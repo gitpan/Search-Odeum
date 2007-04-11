@@ -16,7 +16,7 @@ our $VERSION;
 
 BEGIN
 {
-    $VERSION = '0.01';
+    $VERSION = '0.02';
     if ($] > 5.006) {
         require XSLoader;
         XSLoader::load(__PACKAGE__, $VERSION);
@@ -132,6 +132,10 @@ return value is a Search::Odeum::Result object.
 
 get the number of documents including a word. this method is faster than search.
 I<$word> specifies the searching word.
+
+=item query(I<$query>)
+
+query a database using a small boolean query language.
 
 =item sync
 

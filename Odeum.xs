@@ -189,6 +189,33 @@ CODE:
 OUTPUT:
     RETVAL
 
+SV *
+Odeum_query(obj, q)
+    SV *obj;
+    const char *q;
+PREINIT:
+    ODEUM *odeum;
+    ODPAIR *pairs;
+    SV *sv;
+    int num;
+    perl_odeum_result *res;
+    CBLIST *errors;
+CODE:
+    odeum = (XS_STATE(perl_odeum *, obj))->odeum;
+    if((pairs = odquery(odeum, q, &num, NULL)) != NULL){
+        Newz(1, res, 1, perl_odeum_result);
+        res->pairs = pairs;
+        res->odeum = odeum;
+        res->num = num;
+        res->idx = 0;
+        XS_STRUCT2OBJ(sv, "Search::Odeum::Result", res);
+        RETVAL = sv;
+    }
+    else 
+        XSRETURN_UNDEF;
+OUTPUT:
+    RETVAL
+
 int
 Odeum_sync(obj)
     SV *obj;
@@ -350,7 +377,6 @@ CODE:
         odeum = podeum->odeum;
         odclose(odeum); 
         podeum->active = 0; 
-        printf("AUTO CLOSE\n");
     }
     Safefree(podeum);
 
@@ -490,6 +516,90 @@ CODE:
 OUTPUT:
     RETVAL
 
+SV *
+OdeumRes_and_op(obj, other);
+    SV *obj;
+    SV *other;
+PREINIT:
+    perl_odeum_result *res1;
+    perl_odeum_result *res2;
+    perl_odeum_result *res;
+    ODPAIR *pairs ;
+    SV *sv;
+    int num;
+CODE:
+    res1 = XS_STATE(perl_odeum_result *, obj);
+    res2 = XS_STATE(perl_odeum_result *, other);
+    if(pairs = odpairsand(res1->pairs, res1->num, res2->pairs, res2->num, &num)) {
+        Newz(1, res, 1, perl_odeum_result);
+        res->pairs = pairs;
+        res->odeum = res1->odeum;
+        res->num = num;
+        res->idx = 0;
+        XS_STRUCT2OBJ(sv, "Search::Odeum::Result", res);
+        RETVAL = sv;
+    }
+    else
+        XSRETURN_UNDEF;
+OUTPUT:
+    RETVAL
+
+SV *
+OdeumRes_or_op(obj, other);
+    SV *obj;
+    SV *other;
+PREINIT:
+    perl_odeum_result *res1;
+    perl_odeum_result *res2;
+    perl_odeum_result *res;
+    ODPAIR *pairs ;
+    SV *sv;
+    int num;
+CODE:
+    res1 = XS_STATE(perl_odeum_result *, obj);
+    res2 = XS_STATE(perl_odeum_result *, other);
+    if(pairs = odpairsor(res1->pairs, res1->num, res2->pairs, res2->num, &num)) {
+        Newz(1, res, 1, perl_odeum_result);
+        res->pairs = pairs;
+        res->odeum = res1->odeum;
+        res->num = num;
+        res->idx = 0;
+        XS_STRUCT2OBJ(sv, "Search::Odeum::Result", res);
+        RETVAL = sv;
+    }
+    else
+        XSRETURN_UNDEF;
+OUTPUT:
+    RETVAL
+
+SV *
+OdeumRes_notand_op(obj, other);
+    SV *obj;
+    SV *other;
+PREINIT:
+    perl_odeum_result *res1;
+    perl_odeum_result *res2;
+    perl_odeum_result *res;
+    ODPAIR *pairs ;
+    SV *sv;
+    int num;
+CODE:
+    res1 = XS_STATE(perl_odeum_result *, obj);
+    res2 = XS_STATE(perl_odeum_result *, other);
+    if(pairs = odpairsnotand(res1->pairs, res1->num, res2->pairs, res2->num, &num)) {
+        Newz(1, res, 1, perl_odeum_result);
+        res->pairs = pairs;
+        res->odeum = res1->odeum;
+        res->num = num;
+        res->idx = 0;
+        XS_STRUCT2OBJ(sv, "Search::Odeum::Result", res);
+        RETVAL = sv;
+    }
+    else
+        XSRETURN_UNDEF;
+OUTPUT:
+    RETVAL
+        
 
 void
 OdeumRes_DESTROY(obj)

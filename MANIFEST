@@ -11,4 +11,6 @@ t/00_load.t
 t/01_odeum.t
 t/02_doc.t
 t/03_search.t
+t/04_query.t
+t/05_op.t
 META.yml                                 Module meta-data (added by MakeMaker)
